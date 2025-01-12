@@ -4,7 +4,8 @@ local PlayerFolder = script.Parent.Player
 
 local Library = setmetatable({
         Player = Players.LocalPlayer,
-        Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+        Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait(),
+        PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
     },
 
     {__index = function(_, index)
@@ -24,7 +25,8 @@ local Library = setmetatable({
 )
 
 function Library.Load()
-    print("NewLoad")
+    Library.Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+    
     for _, module: Instance in pairs(PlayerFolder:GetChildren()) do
         if module.ClassName == "ModuleScript" then
             Library[module.Name] = require(module)
@@ -40,11 +42,13 @@ function Library.Load()
             continue
         end
 
-        if not module.OnLoad then
-            continue
+        if module.OnLoad then
+            module.OnLoad()
         end
 
-        module.OnLoad()
+        if module.OnGuiLoad then
+            module.OnGuiLoad()
+        end
     end
 
     Library.GetIntellisense()

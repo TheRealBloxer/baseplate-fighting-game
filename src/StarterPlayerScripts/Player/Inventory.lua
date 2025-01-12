@@ -23,12 +23,22 @@ function Inventory.new(): ClassType
 
     self.Selected = self[1]
     self.SelectedIndex = 1
-    
+
+    self:_init()
+
     return self
+end
+
+function Inventory._init(self: ClassType)
+    Library.PlayerGui.InventoryUI.Container[self.SelectedIndex].BackgroundTransparency = 0.5
+    ToolGrabber.EquipTool(self, self.Selected)
 end
 
 function Inventory.SwitchToItem(self: ClassType, index: number)
     if self[index] then
+        Library.PlayerGui.InventoryUI.Container[self.SelectedIndex].BackgroundTransparency = 0.75
+        Library.PlayerGui.InventoryUI.Container[index].BackgroundTransparency = 0.5
+
         self.Selected = self[index]
         self.SelectedIndex = index
         ToolGrabber.EquipTool(self, self.Selected)
