@@ -13,17 +13,17 @@ local NUMBER_INDEX = {
     [5] = "Five",
 }
 
-function InventoryManager.OnLoad()
-    local playerInventory = Inventory.new()
+function InventoryManager.OnGameStart()
+    Inventory.CurrentInventory = Inventory.new()
 
-    for index, item in pairs(playerInventory) do
+    for index, _ in pairs(Inventory.CurrentInventory) do
         if not tonumber(index) then
             continue
         end
 
         ContextActionService:BindAction("ChangeInventoryItem"..index, function(_, inputState: Enum.UserInputState, _)
             if inputState == Enum.UserInputState.Begin then
-                playerInventory:SwitchToItem(index)
+                Inventory.CurrentInventory:SwitchToItem(index)
             end
         end, false, Enum.KeyCode[NUMBER_INDEX[index]])
     end

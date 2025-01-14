@@ -8,9 +8,7 @@ function ToolGrabber.EquipTool(inventory: Library.Inventory, name: string)
     local tool: Tool = ReplicatedStorage.Tools:FindFirstChild(name)
 
     if tool then
-        local newTool = tool:Clone()
-        newTool.Parent = Library.Character
-        Library.Character.Humanoid:EquipTool(newTool)
+        ReplicatedStorage.Events.ToolEquipped:FireServer(tool)
     end
 end
 

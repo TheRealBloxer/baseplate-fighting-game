@@ -4,7 +4,7 @@ local PlayerStatus: {[Player]: string} = {}
 
 function PlayerStatus.OnLoad()
     Players.PlayerAdded:Connect(function(player)
-        PlayerStatus[player] = "In Game"
+        PlayerStatus[player] = "Lobby"
     end)
 
     Players.PlayerRemoving:Connect(function(player)

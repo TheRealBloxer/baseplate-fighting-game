@@ -1,7 +1,7 @@
 local Library = require(script.Parent.Parent.Library)
 local ToolGrabber = Library.ToolGrabber
 
-local Inventory = {}
+local Inventory: {CurrentInventory: ClassType} = {}
 Inventory.__index = Inventory
 
 export type ClassType = typeof(setmetatable(

@@ -9,10 +9,8 @@ local cameraLoop: RBXScriptConnection
 
 local Camera = {}
 
-function Camera.OnLoad()
-    if cameraLoop then
-        cameraLoop:Disconnect()
-    end
+function Camera.OnGameStart()
+    Camera.Disable()
 
     camera.CFrame = CFrame.new()
     camera.CFrame = Library.Character.HumanoidRootPart.CFrame
@@ -21,6 +19,12 @@ function Camera.OnLoad()
     cameraLoop = RunService.RenderStepped:Connect(function()
         camera.CFrame = camera.CFrame:Lerp(Library.Character.HumanoidRootPart.CFrame * CFrame.new(3, 2, 7), 0.2)
     end)
+end
+
+function Camera.Disable()
+    if cameraLoop then
+        cameraLoop:Disconnect()
+    end
 end
 
 return Camera

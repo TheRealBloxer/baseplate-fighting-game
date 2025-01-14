@@ -10,6 +10,50 @@
         "$className": "Folder"
       },
 
+      "Events": {
+        "$className": "Folder",
+
+        "PlayerLeavingLobby": {
+          "$className": "RemoteEvent"
+        },
+
+        "PlayerJoinedGame": {
+          "$className": "RemoteEvent"
+        },
+
+        "ToolEquipped": {
+          "$className": "RemoteEvent"
+        },
+
+        "VoteForFreeForAll": {
+          "$className": "RemoteEvent"
+        },
+
+        "VoteForTeamDeathmatch": {
+          "$className": "RemoteEvent"
+        },
+
+        "VotingChanged": {
+          "$className": "RemoteEvent"
+        },
+
+        "VotingBegan": {
+          "$className": "RemoteEvent"
+        },
+
+        "VotingEnded": {
+          "$className": "RemoteEvent"
+        }
+      },
+
+      "GameStats": {
+        "$className": "Folder",
+
+        "TimeLeft": {
+          "$className": "NumberValue"
+        }
+      },
+
       "$ignoreUnknownInstances": true
     },
 
