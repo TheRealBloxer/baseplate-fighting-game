@@ -12,6 +12,9 @@ local freeForAllVotes = {}
 local teamDeathmatchVotes = {}
 
 function VotingSystem.StartVoting()
+    table.clear(freeForAllVotes)
+    table.clear(teamDeathmatchVotes)
+    
     ReplicatedStorage.Events.VotingBegan:FireAllClients()
 
     _VotingConnections:AddTo("Connections", {
@@ -53,7 +56,7 @@ end
 
 function VotingSystem.EndVoting(): string
     ReplicatedStorage.Events.VotingEnded:FireAllClients()
-    
+
     _VotingConnections:Dump()
 
     if #freeForAllVotes > #teamDeathmatchVotes then

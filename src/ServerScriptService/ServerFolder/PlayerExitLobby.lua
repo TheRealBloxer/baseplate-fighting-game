@@ -10,7 +10,7 @@ local PlayerExitLobby = {}
 
 function PlayerExitLobby.OnLoad()
     ReplicatedStorage.Events.PlayerLeavingLobby.OnServerEvent:Connect(function(player)
-        if RoundSystem.GameMode ~= "Free For All" or RoundSystem.GameMode ~= "Team Deathmatch" then
+        if ReplicatedStorage.GameStats.GameMode.Value ~= "Free For All" and ReplicatedStorage.GameStats.GameMode.Value ~= "Team Deathmatch" then
             return
         end
 

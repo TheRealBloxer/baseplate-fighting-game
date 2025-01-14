@@ -30,6 +30,7 @@ local Library = setmetatable({
 })
 
 function Library.Load()
+    Library.DataState.new("Player")
     Library.Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
     
     for _, module: Instance in pairs(PlayerFolder:GetChildren()) do
@@ -81,11 +82,14 @@ end
 
 function Library.GetIntellisense() -- This library system does not provide intellisense, so for modules that we need to access from other ones later (especially classes), this is extremely useful.
     Library.DataState = require(ReplicatedStorage.DataState)
+
+    Library.TransitionModule = require(PlayerFolder.TransitionModule)
     
     Library.Camera = require(PlayerFolder.Camera)
     Library.Inventory = require(PlayerFolder.Inventory)
 
     Library.ToolGrabber = require(PlayerFolder.ToolGrabber)
+    Library.CharacterViewport = require(PlayerFolder.CharacterViewport)
 end
 
 return Library
