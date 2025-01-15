@@ -12,7 +12,7 @@ local RoundSystem = {
 
 local INTERMISSION_LENGTH = 10
 local VOTING_LENGTH = 10
-local ROUND_LENGTH = 212
+local ROUND_LENGTH = 20
 
 local timeLeft = ReplicatedStorage.GameStats.TimeLeft
 

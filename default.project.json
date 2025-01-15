@@ -25,6 +25,10 @@
           "$className": "RemoteEvent"
         },
 
+        "UpdateKill": {
+          "$className": "RemoteEvent"
+        },
+
         "VoteForFreeForAll": {
           "$className": "RemoteEvent"
         },

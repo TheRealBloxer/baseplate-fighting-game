@@ -9,8 +9,6 @@ local TransitionModule = Library.TransitionModule
 
 local ClientVoting = {}
 
-local _Connections = DataState.new("ClientVoting")
-
 type VoteFrame = Frame & {
     Votes: TextLabel,
     Title: TextLabel,
@@ -29,6 +27,8 @@ local function tweenVotingOptions(option1: VoteFrame, option2: VoteFrame, chosen
 end
 
 ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
+    local _Connections = DataState.new("ClientVoting")
+
     local votingUI: ScreenGui & {FreeForAll: VoteFrame, TeamDeathmatch: VoteFrame} = Library.PlayerGui.VotingUI
 
     local freeForAllChosen = false
@@ -72,7 +72,7 @@ ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
 end)
 
 ReplicatedStorage.Events.VotingEnded.OnClientEvent:Connect(function()
-    _Connections:Dump()
+    DataState.Find("ClientVoting"):Delete()
 
     if Library.PlayerGui.VotingUI.Enabled then
         TransitionModule.StartTransition(0.5, 0, true, true)
