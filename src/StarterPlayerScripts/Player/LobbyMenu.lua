@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
@@ -41,7 +42,7 @@ function LobbyMenu.OnLoad() -- connections need to be in datastate
 
         ReplicatedStorage.Events.PlayerJoinedGame.OnClientEvent:Connect(function()
             lobbyUI.Play.Button.Active = false
-            
+
             TransitionModule.StartTransition(0.5, 0, true, true)
             task.wait(0.5)
             Library.LoadGame()

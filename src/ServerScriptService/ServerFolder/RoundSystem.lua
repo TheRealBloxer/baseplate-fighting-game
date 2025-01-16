@@ -10,9 +10,9 @@ local VotingSystem = Library.VotingSystem
 
 local RoundSystem = {}
 
-local INTERMISSION_LENGTH = 10
-local VOTING_LENGTH = 10
-local ROUND_LENGTH = 120
+local INTERMISSION_LENGTH = 2
+local VOTING_LENGTH = 5
+local ROUND_LENGTH = 30
 
 local gameMode = ReplicatedStorage.GameStats.GameMode
 local timeLeft = ReplicatedStorage.GameStats.TimeLeft
