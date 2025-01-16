@@ -28,7 +28,7 @@ function Camera.OnGameStart()
         xOffset = math.sign(xOffset) * TweenService:GetValue(math.abs(xOffset), Enum.EasingStyle.Sine, Enum.EasingDirection.In)
 
         Library.Character.HumanoidRootPart.CFrame *= CFrame.Angles(0, xOffset, 0)
-        camera.CFrame = camera.CFrame:Lerp(Library.Character.HumanoidRootPart.CFrame * CFrame.new(3, 2, 7), 0.2)
+        camera.CFrame = Library.Character.HumanoidRootPart.CFrame * CFrame.new(3, 2, 7)
     end)
 end
 

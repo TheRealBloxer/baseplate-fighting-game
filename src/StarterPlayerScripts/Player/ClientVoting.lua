@@ -41,6 +41,7 @@ ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
     task.wait(0.5)
     TransitionModule.StartTransition(0.5)
 
+    Library.PlayerGui.LeaderboardUI.Enabled = false
     Library.PlayerGui.LobbyUI.Enabled = false
     votingUI.Enabled = true
 

@@ -15,6 +15,7 @@ function GUILoader.OnGuiLoad()
     Library.PlayerGui.PlayerStatsUI.Enabled = false
     Library.PlayerGui.InventoryUI.Enabled = false
     Library.PlayerGui.VotingUI.Enabled = false
+    Library.PlayerGui.LeaderboardUI.Enabled = false
 end
 
 function GUILoader.OnGameStart()
@@ -24,6 +25,7 @@ function GUILoader.OnGameStart()
     Library.PlayerGui.PlayerStatsUI.Enabled = true
     Library.PlayerGui.InventoryUI.Enabled = true
     Library.PlayerGui.KillScoreUI.Enabled = true
+    Library.PlayerGui.LeaderboardUI.Enabled = false
 end
 
 return GUILoader

@@ -5,13 +5,14 @@ local Library = require(script.Parent.Parent.Library)
 
 local Leaderboard = Library.Leaderboard
 local PlayerStatus = Library.PlayerStatus
+local TeamManager = Library.TeamManager
 local VotingSystem = Library.VotingSystem
 
 local RoundSystem = {}
 
 local INTERMISSION_LENGTH = 10
-local VOTING_LENGTH = 5
-local ROUND_LENGTH = 20
+local VOTING_LENGTH = 10
+local ROUND_LENGTH = 120
 
 local gameMode = ReplicatedStorage.GameStats.GameMode
 local timeLeft = ReplicatedStorage.GameStats.TimeLeft
@@ -54,6 +55,10 @@ function RoundSystem.NewRound()
 
     gameMode.Value = VotingSystem.EndVoting()
 
+    if gameMode.Value == "Team Deathmatch" then
+        TeamManager.CreateTeams()
+    end
+
     RoundSystem.StartMatch()
 
     timeLeft.Value = ROUND_LENGTH
@@ -87,6 +92,10 @@ function RoundSystem.EndMatch()
             character.Humanoid:TakeDamage(1000)
             PlayerStatus[player] = "Lobby"
         end
+    end
+
+    if gameMode.Value == "Team Deathmatch" then
+        TeamManager.RemoveTeams()
     end
 
     task.spawn(function()

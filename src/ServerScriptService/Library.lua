@@ -48,6 +48,7 @@ function Library.GetIntellisense() -- This library system does not provide intel
     
     Library.PlayerStatus = require(ServerFolder.PlayerStatus)
     Library.RoundSystem = require(ServerFolder.RoundSystem)
+    Library.TeamManager = require(ServerFolder.TeamManager)
     Library.VotingSystem = require(ServerFolder.VotingSystem)
     Library.Leaderboard = require(ServerFolder.Leaderboard)
 end
