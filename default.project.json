@@ -47,6 +47,10 @@
 
         "VotingEnded": {
           "$className": "RemoteEvent"
+        },
+
+        "MatchEnded": {
+          "$className": "RemoteEvent"
         }
       },
 

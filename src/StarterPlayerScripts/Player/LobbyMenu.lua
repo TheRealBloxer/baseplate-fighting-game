@@ -40,6 +40,8 @@ function LobbyMenu.OnLoad() -- connections need to be in datastate
         ReplicatedStorage.GameStats.GameMode.Changed:Connect(changePlayButtonColour),
 
         ReplicatedStorage.Events.PlayerJoinedGame.OnClientEvent:Connect(function()
+            lobbyUI.Play.Button.Active = false
+            
             TransitionModule.StartTransition(0.5, 0, true, true)
             task.wait(0.5)
             Library.LoadGame()

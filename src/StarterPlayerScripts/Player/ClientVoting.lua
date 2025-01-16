@@ -29,7 +29,7 @@ end
 ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
     local _Connections = DataState.new("ClientVoting")
 
-    local votingUI: ScreenGui & {FreeForAll: VoteFrame, TeamDeathmatch: VoteFrame} = Library.PlayerGui.VotingUI
+    local votingUI: ScreenGui & {FreeForAll: VoteFrame, TeamDeathmatch: VoteFrame} = Library.PlayerGui:WaitForChild("VotingUI")
 
     local freeForAllChosen = false
     local teamDeathmatchChosen = false
@@ -44,6 +44,7 @@ ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
     Library.PlayerGui.LobbyUI.Enabled = false
     votingUI.Enabled = true
 
+    print(votingUI)
     _Connections:AddTo("Connections", {
         ReplicatedStorage.Events.VotingChanged.OnClientEvent:Connect(function(freeForAllVotes: {Player}, teamDeathmatchVotes: {Player})
             votingUI.FreeForAll.Votes.Text = #freeForAllVotes

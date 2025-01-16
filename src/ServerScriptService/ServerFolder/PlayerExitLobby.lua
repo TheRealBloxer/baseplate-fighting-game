@@ -15,6 +15,11 @@ function PlayerExitLobby.OnLoad()
         end
 
         PlayerStatus[player] = "Game"
+        (player.Character or player.CharacterAdded:Wait()):WaitForChild("Humanoid").WalkSpeed = 16
+        
+        local character = player.Character or player.CharacterAdded:Wait()
+        character:MoveTo(Vector3.new(math.random(0, 50), 2, math.random(0, 50)))
+
         ReplicatedStorage.Events.PlayerJoinedGame:FireClient(player)
     end)
 end

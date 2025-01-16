@@ -8,20 +8,18 @@ local Camera = Library.Camera
 
 local DeathAnimation = {}
 
-function DeathAnimation.OnGameStart()
-    Library.Character.Humanoid.Died:Connect(function()
-        Camera.Disable()
+Library.Character.Humanoid.Died:Connect(function()
+    Camera.Disable()
 
-        local camera = workspace.CurrentCamera
-        camera.CameraType = Enum.CameraType.Scriptable
+    local camera = workspace.CurrentCamera
+    camera.CameraType = Enum.CameraType.Scriptable
 
-        TweenService:Create(camera, TweenInfo.new(1, Enum.EasingStyle.Quad), {FieldOfView = 100}):Play()
-        TweenService:Create(Library.PlayerGui.Fades.Black, TweenInfo.new(3), {BackgroundTransparency = 0}):Play()
+    TweenService:Create(camera, TweenInfo.new(1, Enum.EasingStyle.Quad), {FieldOfView = 100}):Play()
+    TweenService:Create(Library.PlayerGui.Fades.Black, TweenInfo.new(3), {BackgroundTransparency = 0}):Play()
 
-        DataState.Find("Player"):AddTo("DeathAnimation", RunService.RenderStepped:Connect(function()
-            camera.CFrame = CFrame.lookAt(camera.CFrame.Position, Library.Character.HumanoidRootPart.CFrame.Position)
-        end))
-    end)
-end
+    DataState.Find("Player"):AddTo("DeathAnimation", RunService.RenderStepped:Connect(function()
+        camera.CFrame = CFrame.lookAt(camera.CFrame.Position, Library.Character.HumanoidRootPart.CFrame.Position)
+    end))
+end)
 
 return DeathAnimation

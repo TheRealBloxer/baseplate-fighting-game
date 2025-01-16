@@ -3,6 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local PlayerFolder = script.Parent.Player
 
+local initializedGame = false
+
 local Library = setmetatable({
         Player = Players.LocalPlayer,
         Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait(),
@@ -42,6 +44,23 @@ function Library.Load()
     local inventory = Library.Inventory
 
     export type Inventory = inventory.ClassType
+
+    Library.PlayerGui:WaitForChild("LobbyUI")
+    Library.PlayerGui:WaitForChild("KillScoreUI")
+
+    if not initializedGame then
+        for _, module in pairs(Library) do
+            if typeof(module) ~= "table" then
+                continue
+            end
+
+            if module.InitializeGame then
+                module.InitializeGame()
+            end
+        end
+    end
+
+    initializedGame = true
 
     for _, module in pairs(Library) do
         if typeof(module) ~= "table" then

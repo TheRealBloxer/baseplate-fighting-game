@@ -3,23 +3,23 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Library = require(script.Parent.Parent.Library)
 
+local Leaderboard = Library.Leaderboard
 local PlayerStatus = Library.PlayerStatus
 local VotingSystem = Library.VotingSystem
 
-local RoundSystem = {
-    GameMode = "Intermission"
-}
+local RoundSystem = {}
 
 local INTERMISSION_LENGTH = 10
-local VOTING_LENGTH = 10
+local VOTING_LENGTH = 5
 local ROUND_LENGTH = 20
 
+local gameMode = ReplicatedStorage.GameStats.GameMode
 local timeLeft = ReplicatedStorage.GameStats.TimeLeft
 
 local playersConnected = 0
 
 function RoundSystem.OnLoad()
-    Players.PlayerAdded:Connect(function(player)
+    Players.PlayerAdded:Connect(function()
         playersConnected += 1
 
         if playersConnected == 1 then
@@ -27,13 +27,17 @@ function RoundSystem.OnLoad()
         end
     end)
 
-    Players.PlayerRemoving:Connect(function(player)
+    Players.PlayerRemoving:Connect(function()
         playersConnected -= 1
     end)
 end
 
 function RoundSystem.NewRound()
-    ReplicatedStorage.GameStats.GameMode.Value = "Intermission"
+    task.spawn(function()
+        task.wait(0.5)
+        gameMode.Value = "Intermission"
+    end)
+
     timeLeft.Value = INTERMISSION_LENGTH
 
     RoundSystem.Countdown()
@@ -43,27 +47,19 @@ function RoundSystem.NewRound()
 
     task.spawn(function()
         task.wait(0.5)
-        ReplicatedStorage.GameStats.GameMode.Value = "Voting"
+        gameMode.Value = "Voting"
     end)
 
     RoundSystem.Countdown()
 
-    ReplicatedStorage.GameStats.GameMode.Value = VotingSystem.EndVoting()
+    gameMode.Value = VotingSystem.EndVoting()
 
     RoundSystem.StartMatch()
 
     timeLeft.Value = ROUND_LENGTH
     RoundSystem.Countdown()
 
-    for _, player: Player in pairs(Players:GetPlayers()) do
-        local character = player.Character or player.CharacterAdded:Wait()
-    
-        if PlayerStatus[player] == "Game" then
-            character.Humanoid:TakeDamage(1000)
-            PlayerStatus[player] = "Lobby"
-        end
-    end
-
+    RoundSystem.EndMatch()
     RoundSystem.NewRound()
 end
 
@@ -74,13 +70,6 @@ function RoundSystem.Countdown()
 end
 
 function RoundSystem.StartMatch()
-    for _, player: Player in pairs(Players:GetPlayers()) do
-        local character = player.Character or player.CharacterAdded:Wait()
-        
-        character.Humanoid.WalkSpeed = 0
-        character:MoveTo(Vector3.new(math.random(0, 50), 2, math.random(0, 50)))
-    end
-
     timeLeft.Value = 5
     RoundSystem.Countdown()
 
@@ -88,6 +77,22 @@ function RoundSystem.StartMatch()
         local character = player.Character or player.CharacterAdded:Wait()
         character.Humanoid.WalkSpeed = 16
     end
+end
+
+function RoundSystem.EndMatch()
+    for _, player: Player in pairs(Players:GetPlayers()) do
+        local character = player.Character or player.CharacterAdded:Wait()
+    
+        if PlayerStatus[player] == "Game" then
+            character.Humanoid:TakeDamage(1000)
+            PlayerStatus[player] = "Lobby"
+        end
+    end
+
+    task.spawn(function()
+        task.wait(5)
+        Leaderboard.ResetCounting()
+    end)
 end
 
 return RoundSystem
