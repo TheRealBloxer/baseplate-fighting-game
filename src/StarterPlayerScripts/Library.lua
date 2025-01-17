@@ -91,8 +91,6 @@ function Library.LoadGame()
             continue
         end
 
-        print("hi")
-
         if module.OnGameStart then
             module.OnGameStart()
         end
@@ -109,6 +107,10 @@ function Library.GetIntellisense() -- This library system does not provide intel
 
     Library.ToolGrabber = require(PlayerFolder.ToolGrabber)
     Library.CharacterViewport = require(PlayerFolder.CharacterViewport)
+    Library.ItemViewport = require(PlayerFolder.ItemViewport)
+
+    Library.Loadout = require(PlayerFolder.Loadout)
+    Library.LobbyMenu = require(PlayerFolder.LobbyMenu)
 end
 
 return Library

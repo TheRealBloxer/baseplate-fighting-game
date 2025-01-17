@@ -1,6 +1,9 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Library = require(script.Parent.Parent.Library)
+
 local ToolGrabber = Library.ToolGrabber
+local ItemViewport = Library.ItemViewport
+
+local Loadout = Library.Loadout
 
 local Inventory: {CurrentInventory: ClassType} = {}
 Inventory.__index = Inventory
@@ -18,9 +21,9 @@ export type ClassType = typeof(setmetatable(
 function Inventory.new(): ClassType
     local self: ClassType = setmetatable({}, Inventory)
 
-    self[1] = "ClassicSword"
-    self[2] = "RocketLauncher"
-    self[3] = "HyperlaserGun"
+    self[1] = Loadout[1]
+    self[2] = Loadout[2]
+    self[3] = Loadout[3]
 
     self.Selected = self[1]
     self.SelectedIndex = 1
@@ -38,25 +41,7 @@ function Inventory._init(self: ClassType)
             continue
         end
 
-        local viewportFrame: ViewportFrame = slot.ViewportFrame
-        local viewportItem = ReplicatedStorage.Tools:FindFirstChild(self[tonumber(slot.Name)])
-
-        if not viewportItem then
-            continue
-        end
-        
-        viewportItem = viewportItem:Clone()
-
-        viewportItem.Parent = viewportFrame.WorldModel
-        viewportItem.Handle.CFrame = CFrame.new(0, 0, 0)
-
-        local viewportCamera = Instance.new("Camera")
-        viewportFrame.CurrentCamera = viewportCamera
-        viewportCamera.Parent = viewportFrame.WorldModel
-        
-        viewportCamera.FieldOfView = 35
-
-        viewportCamera.CFrame = CFrame.lookAt(viewportItem.Handle.CFrame.Position + Vector3.new(4, 3, -8), viewportItem.Handle.CFrame.Position)
+        ItemViewport.CreateViewport(slot, self[tonumber(slot.Name)])
     end
 
     ToolGrabber.EquipTool(self, self.Selected)

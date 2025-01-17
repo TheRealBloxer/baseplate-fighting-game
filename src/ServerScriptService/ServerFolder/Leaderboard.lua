@@ -1,5 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Library = require(script.Parent.Parent.Library)
+local ItemDrops = Library.ItemDrops
+
 local Leaderboard = {
     LastHit = {},
     Kills = {}
@@ -16,6 +19,7 @@ function Leaderboard.AddKill(player: Player, killedBy: Player)
 
     table.insert(Leaderboard.Kills[killedBy.Name], player)
     ReplicatedStorage.Events.UpdateKill:FireAllClients(player, killedBy)
+    ItemDrops.RollForDrop(player)
 end
 
 function Leaderboard.ResetCounting()
