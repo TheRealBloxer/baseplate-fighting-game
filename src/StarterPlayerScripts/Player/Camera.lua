@@ -25,7 +25,11 @@ function Camera.OnGameStart()
     cameraLoop = RunService.RenderStepped:Connect(function()
         local xOffset = 0.5 - (mouse.X) / (viewportSize.X)
         
-        xOffset = math.sign(xOffset) * TweenService:GetValue(math.abs(xOffset), Enum.EasingStyle.Sine, Enum.EasingDirection.In)
+        if mouse.X > viewportSize.X or mouse.X <= 0 then
+            xOffset = 0.5
+        else
+            xOffset = math.sign(xOffset) * TweenService:GetValue(math.abs(xOffset), Enum.EasingStyle.Sine, Enum.EasingDirection.In)
+        end
 
         Library.Character.HumanoidRootPart.CFrame *= CFrame.Angles(0, xOffset, 0)
         camera.CFrame = Library.Character.HumanoidRootPart.CFrame * CFrame.new(3, 2, 7)

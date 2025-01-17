@@ -18,6 +18,18 @@ function VotingSystem.StartVoting()
     
     ReplicatedStorage.Events.VotingBegan:FireAllClients()
 
+    for _, player: Player in pairs(Players:GetPlayers()) do
+        _VotingConnections:AddTo(player.Name.."Added", player.CharacterAdded:Connect(function()
+            ReplicatedStorage.Events.AddPlayerToVote:FireClient(player, freeForAllVotes, teamDeathmatchVotes)
+        end))
+    end
+
+    _VotingConnections:AddTo("PlayerJoined", Players.PlayerAdded:Connect(function(player)
+        _VotingConnections:AddTo(player.Name.."Added", player.CharacterAdded:Connect(function()
+            ReplicatedStorage.Events.AddPlayerToVote:FireClient(player, freeForAllVotes, teamDeathmatchVotes)
+        end))
+    end))
+
     _VotingConnections:AddTo("Connections", {
         ReplicatedStorage.Events.VoteForFreeForAll.OnServerEvent:Connect(function(player)
             local newVotePlayerIndex = table.find(freeForAllVotes, player)

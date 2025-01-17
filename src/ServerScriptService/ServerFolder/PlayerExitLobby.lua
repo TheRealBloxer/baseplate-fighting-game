@@ -14,10 +14,14 @@ function PlayerExitLobby.OnLoad()
             return
         end
 
-        PlayerStatus[player] = "Game"
-        (player.Character or player.CharacterAdded:Wait()):WaitForChild("Humanoid").WalkSpeed = 16
-        
         local character = player.Character or player.CharacterAdded:Wait()
+
+        PlayerStatus[player] = "Game"
+
+        if RoundSystem.MatchStarted then
+            character:WaitForChild("Humanoid").WalkSpeed = 30
+        end
+        
         character:MoveTo(Vector3.new(math.random(0, 50), 2, math.random(0, 50)))
 
         ReplicatedStorage.Events.PlayerJoinedGame:FireClient(player)

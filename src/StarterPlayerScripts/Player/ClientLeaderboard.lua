@@ -34,16 +34,22 @@ function ClientLeaderboard.OnGameStart()
         ReplicatedStorage.Events.UpdateKill.OnClientEvent:Connect(function(playerKilled: Player, killedBy: Player)
             local newKill = killScoreUI.KillList.Template:Clone()
 
+            if ReplicatedStorage.GameStats.GameMode.Value == "Team Deathmatch" then
+                newKill.BackgroundColor3 = killedBy.TeamColor.Color
+            end
+
+            if killedBy == Library.Player then
+                newKill.UIStroke.Enabled = true
+                newKill.UIStroke.Color = Color3.new(0, 0.5, 0)
+            elseif playerKilled == Library.Player.Character then
+                newKill.UIStroke.Enabled = true
+                newKill.UIStroke.Color = Color3.new(0.5, 0, 0)
+            end
+
             newKill.Name = playerKilled.Name..killedBy.Name
             newKill.Description.Text = killedBy.Name.." -> "..playerKilled.Name
             newKill.Parent = killScoreUI.KillList
             newKill.LayoutOrder = -totalKillCount
-
-            if killedBy == Library.Player then
-                newKill.BackgroundColor3 = Color3.new(0, 0.5, 0)
-            elseif playerKilled == Library.Player then
-                newKill.BackgroundColor3 = Color3.new(0.5, 0, 0)
-            end
 
             newKill.Visible = true
 
@@ -78,6 +84,18 @@ ReplicatedStorage.Events.MatchEnded.OnClientEvent:Connect(function(kills: {[stri
 
         newPosition.Visible = true
     end
+
+    task.spawn(function()
+        task.wait(5)
+        
+        for _, instance: Instance in pairs(leaderboardUI.Container.List:GetChildren()) do
+            if instance.Name ~= "Template" then
+                instance:Destroy()
+            end
+        end
+        
+        leaderboardUI.Enabled = false
+    end)
 end)
 
 return ClientLeaderboard

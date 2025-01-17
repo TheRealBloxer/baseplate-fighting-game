@@ -9,6 +9,8 @@ local TransitionModule = Library.TransitionModule
 
 local ClientVoting = {}
 
+local votingUI: ScreenGui & {FreeForAll: VoteFrame, TeamDeathmatch: VoteFrame}
+
 type VoteFrame = Frame & {
     Votes: TextLabel,
     Title: TextLabel,
@@ -26,51 +28,61 @@ local function tweenVotingOptions(option1: VoteFrame, option2: VoteFrame, chosen
     end
 end
 
-ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
+local function updateVotes(freeForAllVotes: {Player}, teamDeathmatchVotes: {Player})
+    votingUI.FreeForAll.Votes.Text = #freeForAllVotes
+    votingUI.TeamDeathmatch.Votes.Text = #teamDeathmatchVotes
+
+    votingUI.FreeForAll.Votes.TextColor3 = if #freeForAllVotes > #teamDeathmatchVotes then Color3.new(1, 0.85, 0.25) else Color3.new(1, 1, 1)
+    votingUI.TeamDeathmatch.Votes.TextColor3 = if #teamDeathmatchVotes > #freeForAllVotes then Color3.new(1, 0.85, 0.25) else Color3.new(1, 1, 1)
+
+    if table.find(freeForAllVotes, Library.Player) then
+        tweenVotingOptions(votingUI.FreeForAll, votingUI.TeamDeathmatch, true)
+    elseif table.find(teamDeathmatchVotes, Library.Player) then
+        tweenVotingOptions(votingUI.TeamDeathmatch, votingUI.FreeForAll, true)
+    else
+        tweenVotingOptions(votingUI.FreeForAll, votingUI.TeamDeathmatch, false)
+    end
+end
+
+local function initiateVoteSystem(initalFFAVotes: {Player}, initialTDMVotes: {Player})
     local _Connections = DataState.new("ClientVoting")
 
-    local votingUI: ScreenGui & {FreeForAll: VoteFrame, TeamDeathmatch: VoteFrame} = Library.PlayerGui:WaitForChild("VotingUI")
-
-    local freeForAllChosen = false
-    local teamDeathmatchChosen = false
+    votingUI = Library.PlayerGui:WaitForChild("VotingUI")
 
     votingUI.FreeForAll.Votes.Text = "0"
     votingUI.TeamDeathmatch.Votes.Text = "0"
-
-    TransitionModule.StartTransition(0.5, 0, true, true)
-    task.wait(0.5)
-    TransitionModule.StartTransition(0.5)
 
     Library.PlayerGui.LeaderboardUI.Enabled = false
     Library.PlayerGui.LobbyUI.Enabled = false
     votingUI.Enabled = true
 
-    print(votingUI)
-    _Connections:AddTo("Connections", {
-        ReplicatedStorage.Events.VotingChanged.OnClientEvent:Connect(function(freeForAllVotes: {Player}, teamDeathmatchVotes: {Player})
-            votingUI.FreeForAll.Votes.Text = #freeForAllVotes
-            votingUI.TeamDeathmatch.Votes.Text = #teamDeathmatchVotes
+    if initalFFAVotes or initialTDMVotes then
+        updateVotes(initalFFAVotes or 0, initialTDMVotes or 0)
+    end
 
-            votingUI.FreeForAll.Votes.TextColor3 = if #freeForAllVotes > #teamDeathmatchVotes then Color3.new(1, 0.85, 0.25) else Color3.new(1, 1, 1)
-            votingUI.TeamDeathmatch.Votes.TextColor3 = if #teamDeathmatchVotes > #freeForAllVotes then Color3.new(1, 0.85, 0.25) else Color3.new(1, 1, 1)
-        end),
+    _Connections:AddTo("Connections", {
+        ReplicatedStorage.Events.VotingChanged.OnClientEvent:Connect(updateVotes),
 
         votingUI.FreeForAll.Button.MouseButton1Click:Connect(function()
-            teamDeathmatchChosen = false
-            freeForAllChosen = not freeForAllChosen
-
-            tweenVotingOptions(votingUI.FreeForAll, votingUI.TeamDeathmatch, freeForAllChosen)
             ReplicatedStorage.Events.VoteForFreeForAll:FireServer()
         end),
 
         votingUI.TeamDeathmatch.Button.MouseButton1Click:Connect(function()
-            freeForAllChosen = false
-            teamDeathmatchChosen = not teamDeathmatchChosen
-
-            tweenVotingOptions(votingUI.TeamDeathmatch, votingUI.FreeForAll, teamDeathmatchChosen)
             ReplicatedStorage.Events.VoteForTeamDeathmatch:FireServer()
         end)
     })
+end
+
+ReplicatedStorage.Events.VotingBegan.OnClientEvent:Connect(function()
+    TransitionModule.StartTransition(0.5, 0, true, true)
+    task.wait(0.5)
+    TransitionModule.StartTransition(0.5)
+
+    initiateVoteSystem()
+end)
+
+ReplicatedStorage.Events.AddPlayerToVote.OnClientEvent:Connect(function(freeForAllVotes: {Player}, teamDeathmatchVotes: {Player})
+    initiateVoteSystem(freeForAllVotes, teamDeathmatchVotes)
 end)
 
 ReplicatedStorage.Events.VotingEnded.OnClientEvent:Connect(function()

@@ -26,19 +26,20 @@ function TeamManager.CreateTeams()
 
     blueTeam.Parent = Teams
     blueTeam.Name = "Blue"
-    blueTeam.TeamColor = BrickColor.Red()
+    blueTeam.TeamColor = BrickColor.Blue()
     blueTeam.AutoAssignable = true
 
-    local currentPlayers = #Players:GetPlayers()
+    local nextTeam = redTeam
 
     for _, player: Player in pairs(Players:GetPlayers()) do
-        if #TeamManager.Red <= (currentPlayers / 2) then
-            player.Team = redTeam
+        player.Team = nextTeam
+        
+        if nextTeam == redTeam then
+            nextTeam = blueTeam
         else
-            player.Team = blueTeam
+            nextTeam = redTeam
         end
     end
-
 
     _Connections:AddTo("Connections", {
         redTeam.PlayerAdded:Connect(function(player)

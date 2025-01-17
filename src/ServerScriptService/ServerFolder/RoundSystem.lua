@@ -8,11 +8,13 @@ local PlayerStatus = Library.PlayerStatus
 local TeamManager = Library.TeamManager
 local VotingSystem = Library.VotingSystem
 
-local RoundSystem = {}
+local RoundSystem = {
+    MatchStarted = false
+}
 
-local INTERMISSION_LENGTH = 10
-local VOTING_LENGTH = 10
-local ROUND_LENGTH = 120
+local INTERMISSION_LENGTH = 2
+local VOTING_LENGTH = 5
+local ROUND_LENGTH = 30
 
 local gameMode = ReplicatedStorage.GameStats.GameMode
 local timeLeft = ReplicatedStorage.GameStats.TimeLeft
@@ -34,6 +36,8 @@ function RoundSystem.OnLoad()
 end
 
 function RoundSystem.NewRound()
+    RoundSystem.MatchStarted = false
+
     task.spawn(function()
         task.wait(0.5)
         gameMode.Value = "Intermission"
@@ -80,8 +84,10 @@ function RoundSystem.StartMatch()
 
     for _, player: Player in pairs(Players:GetPlayers()) do
         local character = player.Character or player.CharacterAdded:Wait()
-        character.Humanoid.WalkSpeed = 16
+        character.Humanoid.WalkSpeed = 30
     end
+
+    RoundSystem.MatchStarted = true
 end
 
 function RoundSystem.EndMatch()
@@ -99,7 +105,7 @@ function RoundSystem.EndMatch()
     end
 
     task.spawn(function()
-        task.wait(5)
+        task.wait(2)
         Leaderboard.ResetCounting()
     end)
 end
