@@ -84,6 +84,18 @@ ReplicatedStorage.Events.MatchEnded.OnClientEvent:Connect(function(kills: {[stri
 
         newPosition.Visible = true
     end
+
+    task.spawn(function()
+        task.wait(5)
+        
+        for _, instance: Instance in pairs(leaderboardUI.Container.List:GetChildren()) do
+            if instance.Name ~= "Template" then
+                instance:Destroy()
+            end
+        end
+        
+        leaderboardUI.Enabled = false
+    end)
 end)
 
 return ClientLeaderboard
