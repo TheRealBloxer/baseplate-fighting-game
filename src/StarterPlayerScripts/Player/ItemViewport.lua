@@ -1,3 +1,7 @@
+--[[
+    Whenever a viewport (second world model) needs to display an item in a inventory/loadout slot, we use this.
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemViewport = {}

@@ -1,3 +1,5 @@
+-- To understand this library I recommend looking at the client library first instead.
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ServerFolder = script.Parent.ServerFolder

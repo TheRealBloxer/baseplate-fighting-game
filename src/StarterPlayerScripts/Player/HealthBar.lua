@@ -5,7 +5,7 @@ local HealthBar = {}
 function HealthBar.OnGameStart()
     local playerStatsUI = Library.PlayerGui.PlayerStatsUI
 
-    Library.Character.Humanoid.HealthChanged:Connect(function(health)
+    Library.Character.Humanoid.HealthChanged:Connect(function(health) -- Change size & colour of health bar based on new health
         Library.PlayerGui.PlayerStatsUI.HealthBar.Base.Size = UDim2.fromScale(health / Library.Character.Humanoid.MaxHealth, 1)
         Library.PlayerGui.PlayerStatsUI.HealthBar.Base.Main.BackgroundColor3 = Color3.fromHSV(0.3 * (health / Library.Character.Humanoid.MaxHealth), 1, 1)
     end)

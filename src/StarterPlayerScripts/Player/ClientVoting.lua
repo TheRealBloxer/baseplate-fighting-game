@@ -1,3 +1,7 @@
+--[[
+    Controls player actions while voting.
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
@@ -56,7 +60,7 @@ local function initiateVoteSystem(initalFFAVotes: {Player}, initialTDMVotes: {Pl
     Library.PlayerGui.LobbyUI.Enabled = false
     votingUI.Enabled = true
 
-    if initalFFAVotes or initialTDMVotes then
+    if initalFFAVotes or initialTDMVotes then -- If there were already votes beforehand they are automatically added.
         updateVotes(initalFFAVotes or 0, initialTDMVotes or 0)
     end
 

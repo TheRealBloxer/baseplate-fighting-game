@@ -1,3 +1,7 @@
+--[[
+    This initializes the client library, which calls every single module from there.
+]]
+
 local Players = game:GetService("Players")
 
 local Library = require(script.Parent.Library)

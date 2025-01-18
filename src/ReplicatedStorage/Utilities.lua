@@ -1,3 +1,0 @@
-local Utilities = {}
-
-return Utilities

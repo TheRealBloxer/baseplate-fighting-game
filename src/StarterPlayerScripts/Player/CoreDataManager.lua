@@ -1,3 +1,5 @@
+-- All datastates get cleared whenever the player dies.
+
 local Library = require(script.Parent.Parent.Library)
 local DataState = Library.DataState
 

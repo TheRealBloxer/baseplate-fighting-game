@@ -1,3 +1,7 @@
+--[[
+    Controls the current vote totals, and the results of them.
+]]
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -18,6 +22,7 @@ function VotingSystem.StartVoting()
     
     ReplicatedStorage.Events.VotingBegan:FireAllClients()
 
+     -- Players are given events that initialize their voting systems whenever their character resets
     for _, player: Player in pairs(Players:GetPlayers()) do
         _VotingConnections:AddTo(player.Name.."Added", player.CharacterAdded:Connect(function()
             ReplicatedStorage.Events.AddPlayerToVote:FireClient(player, freeForAllVotes, teamDeathmatchVotes)
@@ -30,6 +35,7 @@ function VotingSystem.StartVoting()
         end))
     end))
 
+    -- When different votes happen we add them in basically
     _VotingConnections:AddTo("Connections", {
         ReplicatedStorage.Events.VoteForFreeForAll.OnServerEvent:Connect(function(player)
             local newVotePlayerIndex = table.find(freeForAllVotes, player)
@@ -68,11 +74,11 @@ function VotingSystem.StartVoting()
 end
 
 function VotingSystem.EndVoting(): string
-    ReplicatedStorage.Events.VotingEnded:FireAllClients()
+    ReplicatedStorage.Events.VotingEnded:FireAllClients() -- Send event that voting ended
 
     _VotingConnections:Dump()
 
-    if #freeForAllVotes > #teamDeathmatchVotes then
+    if #freeForAllVotes > #teamDeathmatchVotes then -- Depending on resuls, stuff is returned for the round system
         return "Free For All"
     else
         return "Team Deathmatch"

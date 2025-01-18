@@ -1,3 +1,7 @@
+--[[
+    Loadouts function through here.
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Library = require(script.Parent.Parent.Library)
@@ -8,7 +12,7 @@ local ItemViewport = Library.ItemViewport
 local LobbyMenu = Library.LobbyMenu
 local CharacterViewport = Library.CharacterViewport
 
-local Loadout = {
+local Loadout = { -- Base loadout
     [1] = "ClassicSword",
     [2] = "HyperlaserGun",
     [3] = "RocketLauncher"
@@ -30,16 +34,17 @@ function Loadout.OnLoad()
             continue
         end
 
-        ItemViewport.CreateViewport(slot, Loadout[slotIndex])
+        ItemViewport.CreateViewport(slot, Loadout[slotIndex]) -- Create a new item for each slot's viewport frame
 
         DataState.Find("Player"):AddTo(slot.Name.."Loadout", slot.Button.MouseButton1Click:Connect(function()
+            -- Index of the currently selected slot is found, which the modulus is then used for with the total number of items, and then added to by 1
             Loadout[slotIndex] = ITEM_LIST[table.find(ITEM_LIST, Loadout[slotIndex]) % #ITEM_LIST + 1]
 
             for _, object: Instance in pairs(slot.ViewportFrame.WorldModel:GetChildren()) do
                 object:Destroy()
             end
 
-            if slot.Name == "1" then
+            if slot.Name == "1" then -- If the slot is the first one then we create a new character viewport with slot one's new tool
                 CharacterViewport.ClearViewport(Library.PlayerGui.LobbyUI.ViewportFrame)
                 CharacterViewport.CreateCharacterViewport(Library.Player.LobbyUI.ViewportFrame)
             end

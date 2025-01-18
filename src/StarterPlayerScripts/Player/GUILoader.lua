@@ -1,3 +1,5 @@
+-- Enables certain GUIs when major events occur
+
 local StarterGui = game:GetService("StarterGui")
 
 local Library = require(script.Parent.Parent.Library)

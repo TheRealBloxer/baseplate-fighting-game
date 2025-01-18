@@ -1,15 +1,19 @@
+--[[
+    Whenever a viewport (second world model) needs to display the player's character, we use this.
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Library = require(script.Parent.Parent.Library)
 
 local CharacterViewport = {}
 
-function CharacterViewport.ClearViewport(viewportFrame: ViewportFrame & {WorldModel: WorldModel})
+function CharacterViewport.ClearViewport(viewportFrame: ViewportFrame & {WorldModel: WorldModel}) -- This clears a viewport
     for _, object: Instance in pairs(viewportFrame.WorldModel:GetChildren()) do
         object:Destroy()
     end
 end
 
-function CharacterViewport.CreateCharacterViewport(viewportFrame: ViewportFrame & {WorldModel: WorldModel})
+function CharacterViewport.CreateCharacterViewport(viewportFrame: ViewportFrame & {WorldModel: WorldModel}) -- This creates the character, camera, and any tool they have equipped
     local Loadout = Library.Loadout
 
     local viewportCamera = Instance.new("Camera")

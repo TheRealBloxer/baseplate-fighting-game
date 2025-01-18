@@ -1,3 +1,7 @@
+--[[
+    Controls the entire round/match system, from starting voting, to starting and ending the game.
+]]
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -7,6 +11,7 @@ local Leaderboard = Library.Leaderboard
 local PlayerStatus = Library.PlayerStatus
 local TeamManager = Library.TeamManager
 local VotingSystem = Library.VotingSystem
+local ItemDrops = Library.ItemDrops
 
 local RoundSystem = {
     MatchStarted = false
@@ -25,7 +30,7 @@ function RoundSystem.OnLoad()
     Players.PlayerAdded:Connect(function()
         playersConnected += 1
 
-        if playersConnected == 1 then
+        if playersConnected >= 1 then -- If more than 1 player is in game, a new round starts
             RoundSystem.NewRound()
         end
     end)
@@ -95,7 +100,7 @@ function RoundSystem.EndMatch()
         local character = player.Character or player.CharacterAdded:Wait()
     
         if PlayerStatus[player] == "Game" then
-            character.Humanoid:TakeDamage(1000)
+            character.Humanoid:TakeDamage(1000) -- Kills every player
             PlayerStatus[player] = "Lobby"
         end
     end
@@ -103,6 +108,8 @@ function RoundSystem.EndMatch()
     if gameMode.Value == "Team Deathmatch" then
         TeamManager.RemoveTeams()
     end
+
+    ItemDrops.RemoveDrops()
 
     task.spawn(function()
         task.wait(2)

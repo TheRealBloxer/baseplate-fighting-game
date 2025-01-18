@@ -1,3 +1,5 @@
+-- This updates kills done by each player, and fires events to every player which will add them to the kill score.
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Library = require(script.Parent.Parent.Library)

@@ -1,3 +1,7 @@
+--[[
+    Displays kills and leaderboard post-game 
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Library = require(script.Parent.Parent.Library)
@@ -30,7 +34,7 @@ function ClientLeaderboard.OnGameStart()
     local totalKillCount = 0
     local killScoreUI: KillScoreUI = Library.PlayerGui.KillScoreUI
 
-    _Connections:AddTo("LeaderboardConnections", {
+    _Connections:AddTo("LeaderboardConnections", { -- Kill score part
         ReplicatedStorage.Events.UpdateKill.OnClientEvent:Connect(function(playerKilled: Player, killedBy: Player)
             local newKill = killScoreUI.KillList.Template:Clone()
 
@@ -72,7 +76,7 @@ ReplicatedStorage.Events.MatchEnded.OnClientEvent:Connect(function(kills: {[stri
 
     leaderboardUI.Enabled = true
 
-    for player, killList in pairs(kills) do
+    for player, killList in pairs(kills) do -- Post-game leaderboard
         local newPosition = leaderboardUI.Container.List.Template:Clone()
         newPosition.Name = player
         newPosition.Parent = leaderboardUI.Container.List

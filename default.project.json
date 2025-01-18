@@ -10,6 +10,10 @@
         "$className": "Folder"
       },
 
+      "Assets": {
+        "$className": "Folder"
+      },
+
       "Events": {
         "$className": "Folder",
 

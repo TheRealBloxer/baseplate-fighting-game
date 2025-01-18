@@ -1,5 +1,3 @@
-local Library = require(script.Parent.Parent.Library)
-
 local LobbyMenuCamera = {}
 
 function LobbyMenuCamera.OnLoad()

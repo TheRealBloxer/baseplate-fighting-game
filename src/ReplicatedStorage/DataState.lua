@@ -61,7 +61,7 @@ function DataState.DeleteAll()
 	end
 end
 
-function DataState.AddTo(self: ClassType, key: string, object: any)
+function DataState.AddTo(self: ClassType, key: string, object: any): any
 	self.Wrapped[key] = object
 end
 

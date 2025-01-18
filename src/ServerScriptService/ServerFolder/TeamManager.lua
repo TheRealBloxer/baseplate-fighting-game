@@ -1,3 +1,7 @@
+--[[
+    Controls teams whenever the match mode Team Deathmatch is voted for.
+]]
+
 local Players = game:GetService("Players")
 local Teams = game:GetService("Teams")
 
@@ -31,7 +35,7 @@ function TeamManager.CreateTeams()
 
     local nextTeam = redTeam
 
-    for _, player: Player in pairs(Players:GetPlayers()) do
+    for _, player: Player in pairs(Players:GetPlayers()) do -- Players are assigned to each team evenly
         player.Team = nextTeam
         
         if nextTeam == redTeam then
@@ -41,7 +45,7 @@ function TeamManager.CreateTeams()
         end
     end
 
-    _Connections:AddTo("Connections", {
+    _Connections:AddTo("Connections", { -- Add/remove different players to the list of players in each team
         redTeam.PlayerAdded:Connect(function(player)
             table.insert(TeamManager.Red, player)
         end),

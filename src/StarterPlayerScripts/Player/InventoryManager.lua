@@ -1,3 +1,7 @@
+--[[
+    Inventory object is created here, and item cycles are also done here
+]]
+
 local ContextActionService = game:GetService("ContextActionService")
 
 local Library = require(script.Parent.Parent.Library)
@@ -21,7 +25,7 @@ function InventoryManager.OnGameStart()
             continue
         end
 
-        ContextActionService:BindAction("ChangeInventoryItem"..index, function(_, inputState: Enum.UserInputState, _)
+        ContextActionService:BindAction("ChangeInventoryItem"..index, function(_, inputState: Enum.UserInputState, _) -- fix
             if inputState == Enum.UserInputState.Begin then
                 Inventory.CurrentInventory:SwitchToItem(index)
             end

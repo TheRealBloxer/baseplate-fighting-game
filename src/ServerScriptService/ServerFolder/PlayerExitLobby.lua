@@ -1,4 +1,5 @@
-local Players = game:GetService("Players")
+-- When a player requests to leave the lobby, this module runs checks and if it can be done, sets it up.
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Library = require(script.Parent.Parent.Library)
@@ -22,9 +23,9 @@ function PlayerExitLobby.OnLoad()
             character:WaitForChild("Humanoid").WalkSpeed = 30
         end
         
-        character:MoveTo(Vector3.new(math.random(0, 50), 2, math.random(0, 50)))
+        character:MoveTo(Vector3.new(math.random(0, 50), 2, math.random(0, 50))) -- Randomize player position
 
-        ReplicatedStorage.Events.PlayerJoinedGame:FireClient(player)
+        ReplicatedStorage.Events.PlayerJoinedGame:FireClient(player) -- Fire event to player so they can initialize their client modules meant for gameplay
     end)
 end
 

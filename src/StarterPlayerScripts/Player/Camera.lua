@@ -1,3 +1,7 @@
+--[[
+    This is a function based module that both controls the position of the camera, and X rotation of the player's character.
+]]
+
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
@@ -23,13 +27,9 @@ function Camera.OnGameStart()
     camera.FieldOfView = 70
 
     cameraLoop = RunService.RenderStepped:Connect(function()
-        local xOffset = 0.5 - (mouse.X) / (viewportSize.X)
-        
-        if mouse.X > viewportSize.X or mouse.X <= 0 then
-            xOffset = 0.5
-        else
-            xOffset = math.sign(xOffset) * TweenService:GetValue(math.abs(xOffset), Enum.EasingStyle.Sine, Enum.EasingDirection.In)
-        end
+        local xOffset = 0.5 - (mouse.X) / (viewportSize.X) -- This defines how much the character's orientation on the x-axis should change based on mouse movement..
+
+        xOffset = math.sign(xOffset) * TweenService:GetValue(math.abs(xOffset), Enum.EasingStyle.Sine, Enum.EasingDirection.In) -- We apply a sine curve to the initial value to make it slowly increase at higher X-offsets. Basically smoothing it.
 
         Library.Character.HumanoidRootPart.CFrame *= CFrame.Angles(0, xOffset, 0)
         camera.CFrame = Library.Character.HumanoidRootPart.CFrame * CFrame.new(3, 2, 7)

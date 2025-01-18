@@ -1,3 +1,5 @@
+-- This module contains the current status of each player, for checks in if statements and stuff like that.
+
 local Players = game:GetService("Players")
 
 local PlayerStatus: {[Player]: string} = {}

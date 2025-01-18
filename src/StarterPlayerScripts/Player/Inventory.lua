@@ -1,3 +1,8 @@
+--[[
+    Only class, or object in the entire project.
+    Lua/Luau features prototypal-based object orientated programming, which this uses.
+]]
+
 local Library = require(script.Parent.Parent.Library)
 
 local ToolGrabber = Library.ToolGrabber
@@ -8,7 +13,7 @@ local Loadout = Library.Loadout
 local Inventory: {CurrentInventory: ClassType} = {}
 Inventory.__index = Inventory
 
-export type ClassType = typeof(setmetatable(
+export type ClassType = typeof(setmetatable( -- This type both provides a structure for the class, but also allows us to see the methods when programming.
     {} :: {
         [number]: string,
 
@@ -18,7 +23,7 @@ export type ClassType = typeof(setmetatable(
     Inventory
 ))
 
-function Inventory.new(): ClassType
+function Inventory.new(): ClassType -- Inventory is constructed
     local self: ClassType = setmetatable({}, Inventory)
 
     self[1] = Loadout[1]
@@ -33,7 +38,7 @@ function Inventory.new(): ClassType
     return self
 end
 
-function Inventory._init(self: ClassType)
+function Inventory._init(self: ClassType) -- init() function creates item viewports and equips player tool.
     Library.PlayerGui.InventoryUI.Container[self.SelectedIndex].BackgroundTransparency = 0.5
 
     for _, slot in pairs(Library.PlayerGui.InventoryUI.Container:GetChildren()) do
@@ -47,7 +52,7 @@ function Inventory._init(self: ClassType)
     ToolGrabber.EquipTool(self, self.Selected)
 end
 
-function Inventory.SwitchToItem(self: ClassType, index: number)
+function Inventory.SwitchToItem(self: ClassType, index: number) -- Switch item, inventory slot, and equip tool
     if self[index] then
         Library.PlayerGui.InventoryUI.Container[self.SelectedIndex].BackgroundTransparency = 0.75
         Library.PlayerGui.InventoryUI.Container[index].BackgroundTransparency = 0.5

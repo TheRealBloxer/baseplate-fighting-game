@@ -1,17 +1,26 @@
+--[[
+    The Library loads every single client module in 3 different stages
+
+    OnGuiLoad(): First, which occurs every join/respawn
+    OnLoad(): Second, same conditions as OnGuiLoad()
+    OnGameStart(): Last, when the player enters a match and begins gameplay
+
+    As well, this provides easy directories (Library.modulehere) for every single module, and
+    intellisense (autocomplete and whatnot) if added below
+]]
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local PlayerFolder = script.Parent.Player
 
-local initializedGame = false
-
-local Library = setmetatable({
+local Library = setmetatable({ -- Player, character, and PlayerGui given easy directories to use when scripting
         Player = Players.LocalPlayer,
         Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait(),
         PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
     },
 
-    {__index = function(_, index)
+    {__index = function(_, index) -- This runs whenever a module is attempted to be accessed, but has not yet been required in the library.
         local module = PlayerFolder:FindFirstChild(index, true)
         local replicatedStorageModule = ReplicatedStorage:FindFirstChild(index, true)
 
@@ -27,13 +36,13 @@ local Library = setmetatable({
             return
         end
 
-        return require(module)
+        return require(module) -- Returns the module at the end, so it can still be used!
     end
 })
 
 function Library.Load()
-    Library.DataState.new("Player")
-    Library.Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+    Library.DataState.new("Player") -- Main DataState where most information is placed
+    Library.Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait() -- The character is reset after each respawn, so we need to reset it to the new one.
     
     for _, module: Instance in pairs(PlayerFolder:GetChildren()) do
         if module.ClassName == "ModuleScript" then
@@ -43,25 +52,12 @@ function Library.Load()
 
     local inventory = Library.Inventory
 
-    export type Inventory = inventory.ClassType
+    export type Inventory = inventory.ClassType -- Inventory class type defined here so it can be accessed
 
     Library.PlayerGui:WaitForChild("LobbyUI")
     Library.PlayerGui:WaitForChild("KillScoreUI")
 
-    if not initializedGame then
-        for _, module in pairs(Library) do
-            if typeof(module) ~= "table" then
-                continue
-            end
-
-            if module.InitializeGame then
-                module.InitializeGame()
-            end
-        end
-    end
-
-    initializedGame = true
-
+    -- Load orders
     for _, module in pairs(Library) do
         if typeof(module) ~= "table" then
             continue
@@ -85,7 +81,7 @@ function Library.Load()
     Library.GetIntellisense()
 end
 
-function Library.LoadGame()
+function Library.LoadGame() -- Another loading order done
     for _, module in pairs(Library) do
         if typeof(module) ~= "table" then
             continue
@@ -97,7 +93,7 @@ function Library.LoadGame()
     end
 end
 
-function Library.GetIntellisense() -- This library system does not provide intellisense, so for modules that we need to access from other ones later (especially classes), this is extremely useful.
+function Library.GetIntellisense() -- This library system does not provide intellisense automatically, so for modules that we need to access from other ones later (especially classes), this is extremely useful.
     Library.DataState = require(ReplicatedStorage.DataState)
 
     Library.TransitionModule = require(PlayerFolder.TransitionModule)
